@@ -17,7 +17,7 @@ def create_app():
     with app.app_context():
         from . import models
         # 开发阶段直接创建表，生产环境通常使用 Flask-Migrate
-        db.create_all() 
+        db.create_all()
         
         # 为了方便调试，如果没有票，我们自动加一张测试票
         if not models.Ticket.query.first():
@@ -25,5 +25,10 @@ def create_app():
             demo_ticket = models.Ticket(name="Python高并发讲座", price=100, total_count=50, remaining_count=50)
             db.session.add(demo_ticket)
             db.session.commit()
+
+
+    # === 新增代码：注册蓝图 ===
+    from .routes import bp as main_bp
+    app.register_blueprint(main_bp)
 
     return app
