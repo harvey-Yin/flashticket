@@ -4,7 +4,7 @@ import threading
 import time
 
 # 目标地址
-BASE_URL = "http://127.0.0.1:5000"
+BASE_URL = "http://0.0.0.0:5000"
 
 def init_data():
     """初始化数据：重置库存为 5 张"""

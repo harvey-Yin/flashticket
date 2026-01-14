@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  # 角色 1: 我们的 Flask 应用
+  web:
+    build: .  # 使用当前目录下的 Dockerfile 构建
+    ports:
+      - "5000:5000"  # 把容器的 5000 映射到电脑的 5000
+    depends_on:
+      - db
+      - redis
+    environment:
+      - FLASK_ENV=development
+
+  # 角色 2: MySQL 数据库
+  db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 737602  # 这里设置数据库密码
+      MYSQL_DATABASE: flashticket_db # 自动创建数据库
+    ports:
+      - "3307:3306" # 为了不和你电脑本地的 MySQL 冲突，我们把外部端口改成 3307
+    volumes:
+      - db_data:/var/lib/mysql # 数据持久化，防止重启容器数据丢失
+
+  # 角色 3: Redis
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+
+volumes:
+  db_data:
